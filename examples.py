@@ -147,3 +147,47 @@ PAYLOAD_GET_EXAMPLE_v2 = {
         }
     }
 }
+
+PAYLOAD_GET_EXAMPLE_3 = {
+    "compose": {
+        "body": {
+            "type": "object",
+            "value": {
+                "POST": "@post.$resp",
+                "USER": "@user.$resp"
+            }
+        }
+    },
+    "resources": {
+        "post": {
+            "url": {
+                "protocol": "http",
+                "hostname": "jsonplaceholder.typicode.com",
+                "path": "/posts/{$post_id}"
+            },
+            "method": "GET",
+            "headers": {
+                "Content-Type": "application/json"
+            }
+        },
+        "user": {
+            "url": {
+                "hostname": "@post.url.hostname",
+                "protocol": "@post.url.protocol",
+                "path": "/users/{@post.$resp.userId}"
+            },
+            "method": "GET",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "parameters": {
+                "post_id": "$post_id"
+            }
+        }
+    },
+    "definitions": {
+        "post_id": {
+            "value": 1
+        }
+    }
+}

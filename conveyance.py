@@ -1,6 +1,7 @@
 import json
 import jsonschema
 import requests
+import re
 from spec import PAYLOAD_SCHEMA, PAYLOAD_SCHEMA_RESOURCE
 
 
@@ -38,6 +39,13 @@ class ConveyString(str):
 
     def has_method(self):
         return "$$" in self
+
+    def find_references(self):
+        #reg = re.compile(r'\{([\$|@][a-zA-Z\d_]{1,255})\}')
+        reg = re.compile(r'\{([\$|@][^\}]*)\}')
+        r = re.findall(reg, self)
+        return r
+
 
 
 class ConveyValue(object):
@@ -118,7 +126,7 @@ class ConveyObject(object):
                 for s in cs_list[1:]:
                     try:
                         if s == "$resp":
-                            value = self.http_handler(self._parse_url(value))
+                            value = self.http_handler(self._parse_url(value, defs, resources))
                             continue
                         value = value.get(s, self.default)
                     except AttributeError:
@@ -126,12 +134,24 @@ class ConveyObject(object):
                         break
                 return value
         else:
+            infuse = cs.find_references()
+            infuse_dict = {}
+            for ref in infuse:
+                convey_ref = ConveyString(ref)
+                if convey_ref.is_reference() or convey_ref.is_resource():
+                    val = self._process_string(convey_ref, defs, resources)
+                    infuse_dict[ref] = val
+            for k, v in infuse_dict.items():
+                cs = cs.replace("{" + k + "}", str(v))   # TODO: improve value inserts; validate it can be done
             return cs
 
-    def _parse_url(self, url_obj):
+    def _parse_url(self, url_obj, defs, resources):
         protocol = url_obj.get('url', {}).get('protocol', 'http')
         hostname = url_obj.get('url', {}).get('hostname')
         path = url_obj.get('url', {}).get('path')
+        protocol = self._process_string(ConveyString(protocol), defs, resources)
+        hostname = self._process_string(ConveyString(hostname), defs, resources)
+        path = self._process_string(ConveyString(path), defs, resources)
         # TODO: clean url parts
         return "{}://{}{}".format(protocol, hostname, path)
 
@@ -262,9 +282,9 @@ class Conveyance(object):
 
 if __name__ == '__main__':
 
-    from examples import PAYLOAD_GET_EXAMPLE, PAYLOAD_GET_EXAMPLE_v2
+    from examples import PAYLOAD_GET_EXAMPLE, PAYLOAD_GET_EXAMPLE_v2, PAYLOAD_GET_EXAMPLE_3
     # PAYLOAD_GET_EXAMPLE['compose']['foo'] = 'foo'
-    conv = Conveyance(PAYLOAD_GET_EXAMPLE_v2)
+    conv = Conveyance(PAYLOAD_GET_EXAMPLE_3)
     print(conv.definitions)
     # for k, v in conv.definitions.items():
     #     value = conv.definitions.get_value(k, conv.resources)
