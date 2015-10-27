@@ -1,0 +1,5 @@
+tornado==4.2.1
+jsonschema==2.5.1
+
+# optional
+requests==2.8.1
