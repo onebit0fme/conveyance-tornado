@@ -11,9 +11,14 @@ class MainHandler(tornado.web.RequestHandler):
 
     def post(self, *args, **kwargs):
 
-        data = json.loads(self.request.body.decode("utf8"))
-        conv = Conveyance(data)
-        compose = conv.compose()(conv.definitions, conv.resources)
+        try:
+            data = json.loads(self.request.body.decode("utf8"))
+            conv = Conveyance(data)
+            compose = conv.compose()(conv.definitions, conv.resources)
+        except Exception as e:
+            compose = {
+                "error": e
+            }
 
         self.set_header("Content-Type", "application/json")
 

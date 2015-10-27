@@ -191,7 +191,7 @@ currently under construction...
             "method": "GET",
             "headers": {
                 "Content-Type": "application/json"
-            },
+            }
         },
         "comments": {
             "url": {
