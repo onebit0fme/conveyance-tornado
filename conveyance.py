@@ -280,19 +280,19 @@ class Conveyance(object):
         return r.json()
 
 
-if __name__ == '__main__':
-
-    from examples import PAYLOAD_GET_EXAMPLE, PAYLOAD_GET_EXAMPLE_v2, PAYLOAD_GET_EXAMPLE_3
-    # PAYLOAD_GET_EXAMPLE['compose']['foo'] = 'foo'
-    conv = Conveyance(PAYLOAD_GET_EXAMPLE_3)
-    print(conv.definitions)
-    # for k, v in conv.definitions.items():
-    #     value = conv.definitions.get_value(k, conv.resources)
-    #     print(k + ": " + repr(value))
+# if __name__ == '__main__':
     #
-    # for k, v in conv.resources.items():
-    #     value = conv.resources.get_response(k, conv.definitions)
-    #     print(k + ": " + repr(value))
-
-    from pprint import pprint
-    pprint(conv.compose()(conv.definitions, conv.resources))
+    # from examples import PAYLOAD_GET_EXAMPLE, PAYLOAD_GET_EXAMPLE_v2, PAYLOAD_GET_EXAMPLE_3
+    # # PAYLOAD_GET_EXAMPLE['compose']['foo'] = 'foo'
+    # conv = Conveyance(PAYLOAD_GET_EXAMPLE_3)
+    # print(conv.definitions)
+    # # for k, v in conv.definitions.items():
+    # #     value = conv.definitions.get_value(k, conv.resources)
+    # #     print(k + ": " + repr(value))
+    # #
+    # # for k, v in conv.resources.items():
+    # #     value = conv.resources.get_response(k, conv.definitions)
+    # #     print(k + ": " + repr(value))
+    #
+    # from pprint import pprint
+    # pprint(conv.compose()(conv.definitions, conv.resources))
