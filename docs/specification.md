@@ -56,6 +56,10 @@ All definitions can be reused in any part of the Payload Object. The syntax to r
 `$` at the beginning of the string, followed by the definition's name (ex. `$post_id`). Also note that definition reference can be
 nested inside object or array, on any level.
 
+Additionally, any reference any be used to insert value inside a string, for example `/path/to/{$resource_id}`.
+Following types can be inserted: `string`, `integer`, `number`, `boolean`, `null`. Note, that type describes
+the final value type. One more example: `My name is {@user.$resp.username}`
+
 ```js
 {
     "post_id": {
