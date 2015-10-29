@@ -6,3 +6,11 @@ Proof of concept prototype for Conveyance spec based on Tornado server. Includes
 well as spec definitions
 
 ### [Conveyance API specification v0.1](docs/specification.md)
+
+### Development
+
+Requirements: Python 3.4
+
+- Setup virtualenv
+- Run `pip install --upgrade -r requirements.txt`
+- Run `python main.py` to spin up Tornado server
